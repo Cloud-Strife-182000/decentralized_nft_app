@@ -1,1 +1,3 @@
 # decentralized_nft_app
+
+still in progress, hold on....
