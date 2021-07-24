@@ -2,7 +2,7 @@
   "name": "nft-color-minter",
   "version": "1.0.0",
   "description": "NFT Color Minter",
-  "author": "Srikanth_G_R",
+  "author": "Srikanth.G.R",
   "dependencies": {
     "babel-polyfill": "6.26.0",
     "babel-preset-env": "1.7.0",
