@@ -3,6 +3,9 @@ import Web3 from 'web3';
 import './App.css';
 import Color from '../abis/Color.json'
 
+const ipfsClient = require('ipfs-http-client')
+const ipfs = ipfsClient({ host: 'ipfs.infura.io', port: 5001, protocol: 'https' })
+
 class App extends Component {
 
   async componentWillMount() {
@@ -77,8 +80,53 @@ class App extends Component {
           account: '',
           contract: null,
           totalSupply: 0,
-          colors: []
+          colors: [],
+          buffer: null,
+          hash: ''
       }
+  }
+
+  captureFile = (event) => {
+
+        event.preventDefault()
+        const file = event.target.files[0]
+        const reader = new window.FileReader()
+        reader.readAsArrayBuffer(file)
+
+        reader.onloadend = () => {
+
+            this.setState({ buffer: Buffer(reader.result) })
+            console.log('buffer', Buffer(reader.result))
+        }
+  }
+
+  submitFile = (event) => {
+
+        event.preventDefault()
+        console.log("Submitting file...")
+
+        ipfs.add(this.state.buffer, (error, result) => {
+
+            console.log("IPFS Result Hash", result[0].hash)
+            this.setState({ hash: result[0].hash })
+
+            if(error){
+
+                console.log("IPFS Error")
+            }
+
+        })
+  }
+
+  displayFile = (event) => {
+
+        event.preventDefault()
+        
+        var path = "https://ipfs.infura.io/ipfs/"
+        path = path + this.state.hash
+
+        window.open(path)
+
   }
 
   mint = (color) => {
@@ -118,8 +166,21 @@ class App extends Component {
 
                 }}>
 
-                <input type='text' className="form-control mb-1" placeholder="For eg. #FFFFFF" ref={(input) => {this.color = input}}></input>
+                <input type='text' className="form-control mb-1 ml-5 mr-5" placeholder="For eg. #FFFFFF" ref={(input) => {this.color = input}}></input>
                 <input type='submit' className="btn btn-block btn-primary" value="MINT"></input>
+                </form>
+
+                <form onSubmit={this.submitFile}>
+
+                <input type='file' onChange={this.captureFile}/>
+                <input type='submit' value="Submit File"/>
+
+                </form>
+
+                <form onSubmit={this.displayFile}>
+
+                <input type='submit' value='display file'/>
+
                 </form>
 
           </div>
@@ -141,6 +202,7 @@ class App extends Component {
       </div>
     );
   }
+  
 }
 
 export default App;
