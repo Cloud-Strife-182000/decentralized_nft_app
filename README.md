@@ -1,5 +1,7 @@
-# decentralized_nft_app
+# Colour Minter
 
 Entry for NFT Vision Hack.
 
-Still in progress...atm it can mint colors from a local blockchain.
+I followed this tutorial: https://www.youtube.com/watch?v=YPbgjPPC1d0
+
+So gotta give ample credits to him. It's a web app that mints colours as NFTs.
